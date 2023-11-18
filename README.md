@@ -5,7 +5,7 @@
 [![Python Version](https://img.shields.io/pypi/pyversions/inspect313.svg)](https://pypi.org/project/inspect313/)
 [![wemake-python-styleguide](https://img.shields.io/badge/style-wemake-000000.svg)](https://github.com/wemake-services/wemake-python-styleguide)
 
-Backport of `insect` module from Python3.13
+Backport of `inspect` module from Python3.13
 
 ## Features
 
