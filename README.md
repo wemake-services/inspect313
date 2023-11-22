@@ -18,7 +18,7 @@ pip install inspect313
 
 ## Examples
 
-### Replace `inspect.getfullargspec` with `inspect.Signature`
+### Replace `inspect.getfullargspec` with `inspect.signature`
 
 `getfullargspec` is an old way of getting the function signature.
 It is [deprecated](https://github.com/python/cpython/issues/108901) since Python 3.13,
@@ -87,6 +87,39 @@ Here's how you can migrate, these results will be in line with `getfullargspec`:
 ...    follow_wrapped=False,
 ... )
 <Signature (*args, **kwargs) -> None>
+
+```
+
+### Replace `inspect.getargvalues` with `inspect.Signature.from_frame`
+
+`getargvalues` was used to create signature-like objects from frame objects.
+But, it didn't really support all features of modern functions.
+
+This is why Python 3.13 introduced `inspect.Signature.from_frame` 
+public constructor and `getargvalues` and `formatargvalues` were deprecated.
+
+Here's how it worked before:
+
+```python
+>>> import inspect
+
+>>> def func(a: int = 0, /, b: int = 1, *, c: int = 2):
+...     return inspect.currentframe()
+
+>>> frame = func()
+>>> # notice that pos-only and kw-only args are not supported properly:
+>>> inspect.formatargvalues(*inspect.getargvalues(frame))
+'(a=0, b=1, c=2)'
+
+```
+
+Here's how to replace it with modern API:
+
+```python
+>>> from inspect313 import Signature
+
+>>> str(Signature.from_frame(frame))
+'(a=0, /, b=1, *, c=2)'
 
 ```
 
