@@ -4,13 +4,20 @@ description = "Backport of `insect` module from Python3.13"
 version = "0.1.0"
 license = "MIT"
 
-authors = []
+authors = [
+  "sobolevn <mail@sobolevn.me>",
+]
 
 readme = "README.md"
 
 repository = "https://github.com/wemake-services/inspect313"
 
-keywords = []
+keywords = [
+  "inspect",
+  "python",
+  "signature",
+  "backport",
+]
 
 classifiers = [
   "Development Status :: 3 - Alpha",
@@ -21,35 +28,65 @@ classifiers = [
 
 [tool.poetry.dependencies]
 python = "^3.8"
+typing-extensions = "^4.8"
 
-[tool.poetry.group.test.dependencies]
+[tool.poetry.group.dev.dependencies]
 mypy = "^1.7"
-
-wemake-python-styleguide = "^0.17"
-flake8-pytest-style = "^1.6"
-nitpick = "^0.34"
-
-safety = "^2.3"
 
 pytest = "^7.4"
 pytest-cov = "^4.1"
 pytest-randomly = "^3.15"
+ruff = "^0.1"
 
-[tool.poetry.group.docs]
-optional = true
 
-[tool.poetry.group.docs.dependencies]
-sphinx = "^7.1"
-sphinx-autodoc-typehints = "^1.25"
-m2r2 = "^0.3"
-tomli = "^2.0"
-doc8 = "^1.0"
+[tool.ruff]
+line-length = 80
+
+fix = true
+select = ['F', 'I']
+fixable = ['ALL']
+
+
+
+[tool.pytest.ini_options]
+addopts = [
+  '--strict-markers',
+  '--strict-config',
+  '--tb=short',
+  '--doctest-modules',
+]
+
+
+[tool.mypy]
+enable_error_code = [
+  'truthy-bool',
+  'redundant-expr',
+  'unused-awaitable',
+  'ignore-without-code',
+  'possibly-undefined',
+  'redundant-self',
+]
+
+allow_redefinition = false
+check_untyped_defs = true
+disallow_any_explicit = false
+disallow_any_generics = true
+disallow_untyped_calls = true
+disallow_incomplete_defs = true
+ignore_errors = false
+ignore_missing_imports = true
+implicit_reexport = false
+local_partial_types = true
+strict_optional = true
+strict_equality = true
+no_implicit_optional = true
+warn_no_return = true
+warn_unused_ignores = true
+warn_redundant_casts = true
+warn_unused_configs = true
+warn_unreachable = true
 
 
 [build-system]
-requires = ["poetry-core>=1.5.0"]
+requires = ["poetry-core>=1.6.0"]
 build-backend = "poetry.core.masonry.api"
-
-
-[tool.nitpick]
-style = "https://raw.githubusercontent.com/wemake-services/wemake-python-styleguide/master/styles/nitpick-style-wemake.toml"
