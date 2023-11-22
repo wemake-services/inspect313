@@ -7,7 +7,7 @@ from __future__ import annotations
 
 import inspect
 import types
-from typing import Any, Callable, Final, Mapping, TypeVar
+from typing import Any, Final, Mapping, TypeVar
 
 _Sig = TypeVar("_Sig", bound=inspect.Signature)
 
@@ -22,11 +22,8 @@ def signature_from_code(
     cls: type[_Sig],
     func_code: types.CodeType,
     *,
-    globals: Mapping[str, Any] | None = None,
     locals: Mapping[str, Any] | None = None,
-    eval_str: bool = False,
     is_duck_function: bool = False,
-    func: Callable[..., Any] | None = None,
     compute_defaults: bool = False,
 ) -> _Sig:
     """Private helper: function to get signature from code objects."""
@@ -39,28 +36,20 @@ def signature_from_code(
     positional = arg_names[:pos_count]
     keyword_only_count = func_code.co_kwonlyargcount
     keyword_only = arg_names[pos_count : pos_count + keyword_only_count]
-    if func is not None:
-        annotations = inspect.get_annotations(
-            func, globals=globals, locals=locals, eval_str=eval_str
-        )
-        defaults = func.__defaults__
-        kwdefaults = func.__kwdefaults__
-    else:
-        annotations = {}
-        if compute_defaults:
-            temp_defaults: list[Any] = []
-            for name in positional:
-                if locals and name in locals:
-                    temp_defaults.append(locals[name])
-            defaults = tuple(temp_defaults)
+    if compute_defaults:
+        temp_defaults: list[Any] = []
+        for name in positional:
+            if locals and name in locals:
+                temp_defaults.append(locals[name])
+        defaults = tuple(temp_defaults)
 
-            kwdefaults = {}
-            for name in keyword_only:
-                if locals and name in locals:
-                    kwdefaults.update({name: locals[name]})
-        else:
-            defaults = None
-            kwdefaults = None
+        kwdefaults = {}
+        for name in keyword_only:
+            if locals and name in locals:
+                kwdefaults.update({name: locals[name]})
+    else:
+        defaults = None
+        kwdefaults = None
 
     if defaults:
         pos_default_count = len(defaults)
@@ -75,8 +64,7 @@ def signature_from_code(
     # Non-keyword-only parameters w/o defaults.
     for name in positional[:non_default_count]:
         kind = _POSITIONAL_ONLY if posonly_left else _POSITIONAL_OR_KEYWORD
-        annotation = annotations.get(name, inspect._empty)
-        parameters.append(Parameter(name, annotation=annotation, kind=kind))
+        parameters.append(Parameter(name, kind=kind))
         if posonly_left:
             posonly_left -= 1
 
@@ -84,22 +72,14 @@ def signature_from_code(
     for offset, name in enumerate(positional[non_default_count:]):
         assert defaults  # mypy needs this
         kind = _POSITIONAL_ONLY if posonly_left else _POSITIONAL_OR_KEYWORD
-        annotation = annotations.get(name, inspect._empty)
-        parameters.append(
-            Parameter(
-                name, annotation=annotation, kind=kind, default=defaults[offset]
-            )
-        )
+        parameters.append(Parameter(name, kind=kind, default=defaults[offset]))
         if posonly_left:
             posonly_left -= 1
 
     # *args
     if func_code.co_flags & inspect.CO_VARARGS:
         name = arg_names[pos_count + keyword_only_count]
-        annotation = annotations.get(name, inspect._empty)
-        parameters.append(
-            Parameter(name, annotation=annotation, kind=_VAR_POSITIONAL)
-        )
+        parameters.append(Parameter(name, kind=_VAR_POSITIONAL))
 
     # Keyword-only parameters.
     for name in keyword_only:
@@ -107,11 +87,9 @@ def signature_from_code(
         if kwdefaults is not None:
             default = kwdefaults.get(name, inspect._empty)
 
-        annotation = annotations.get(name, inspect._empty)
         parameters.append(
             Parameter(
                 name,
-                annotation=annotation,
                 kind=_KEYWORD_ONLY,
                 default=default,
             )
@@ -123,15 +101,11 @@ def signature_from_code(
             index += 1
 
         name = arg_names[index]
-        annotation = annotations.get(name, inspect._empty)
-        parameters.append(
-            Parameter(name, annotation=annotation, kind=_VAR_KEYWORD)
-        )
+        parameters.append(Parameter(name, kind=_VAR_KEYWORD))
 
     # Is 'func' is a pure Python function - don't validate the
     # parameters list (for correct order and defaults), it should be OK.
     return cls(
         parameters,
-        return_annotation=annotations.get("return", inspect._empty),
         __validate_parameters__=is_duck_function,
     )
