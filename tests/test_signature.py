@@ -1,8 +1,20 @@
+import functools
 import inspect
+from typing import Any, TypeVar, Callable, cast
 
 import pytest
 
 import inspect313
+
+_Func = TypeVar("_Func", bound=Callable[..., Any])
+
+
+def _decorator(func: _Func) -> _Func:
+    @functools.wraps(func)
+    def wrapper(*args: Any, **kwargs: Any) -> Any:
+        return func(*args, **kwargs)
+
+    return cast(_Func, wrapper)
 
 
 def _function(
@@ -16,6 +28,11 @@ def _function(
     **kwargs,
 ) -> None:
     """Function to test."""
+
+
+@_decorator  # will have `__wrapped__` set
+def _decorated_function(a: int, /, b: str) -> None:
+    ...
 
 
 class _Class:
@@ -41,6 +58,7 @@ class _Class:
     "obj",
     [
         _function,
+        _decorated_function,
         _Class,
         _Class(),
         _Class.method,
@@ -66,6 +84,7 @@ def test_signature_default(obj) -> None:
             _function,
             "(a: int, /, b: str, c: int = 0, *d, e: bool, f: bool = True, **kwargs) -> None",
         ),
+        (_decorated_function, "(*args, **kwargs) -> None"),
         (_Class, "(self, default: int = 0) -> None"),
         (_Class(), "(self, c: int, *, d: str) -> None"),
         (_Class.method, "(self, e, /, *args, **kwargs) -> None"),
@@ -76,10 +95,21 @@ def test_signature_default(obj) -> None:
         (_Class().cl, "(cls, arg3: int, /, *, arg4: str = 'a') -> None"),
     ],
 )
-def test_signature_present_bound_arg(obj, expected: str) -> None:
+def test_signature_to_migrate(obj, expected: str) -> None:
     """Test that you keep bound args."""
-    assert str(inspect313.signature(obj, skip_bound_arg=False)) == expected
     assert (
-        str(inspect313.Signature.from_callable(obj, skip_bound_arg=False))
+        str(
+            inspect313.signature(
+                obj, skip_bound_arg=False, follow_wrapped=False
+            )
+        )
+        == expected
+    )
+    assert (
+        str(
+            inspect313.Signature.from_callable(
+                obj, skip_bound_arg=False, follow_wrapped=False
+            )
+        )
         == expected
     )

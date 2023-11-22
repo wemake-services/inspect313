@@ -29,6 +29,8 @@ need this package to have the same functionality.
 
 Here's how `getfullargspec` is different from regular `signature` call:
 
+- the `self` / `cls` parameter is always reported, even for bound methods
+
 ```python
 >>> import inspect
 
@@ -43,12 +45,43 @@ FullArgSpec(args=['self', 'arg'], varargs=None, varkw=None, defaults=None, kwonl
 
 ```
 
+- wrapper chains defined by `__wrapped__` *not* unwrapped automatically
+
+```python
+>>> import functools
+
+>>> def some_decorator(f):
+...     @functools.wraps(f)
+...     def wrapper(*args, **kwargs):
+...         return f(*args, **kwargs)
+...     return wrapper
+
+>>> @some_decorator
+... def func(a: int, /, b: str) -> None: ...
+
+>>> inspect.getfullargspec(func)
+FullArgSpec(args=[], varargs='args', varkw='kwargs', defaults=None, kwonlyargs=[], kwonlydefaults=None, annotations={'return': None})
+
+```
+
 Here's how you can migrate:
 
 ```python
 >>> import inspect313
->>> inspect313.signature(A().method, skip_bound_arg=False)
+
+>>> inspect313.signature(
+...    A().method, 
+...    skip_bound_arg=False, 
+...    follow_wrapped=False,
+... )
 <Signature (self, arg: int) -> None>
+
+>>> inspect313.signature(
+...    func, 
+...    skip_bound_arg=False, 
+...    follow_wrapped=False,
+... )
+<Signature (*args, **kwargs) -> None>
 
 ```
 
