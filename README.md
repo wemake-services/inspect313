@@ -1,6 +1,6 @@
 # inspect313
 
-[![Build Status](https://github.com/wemake-services/inspect313/workflows/test/badge.svg?branch=master&event=push)](https://github.com/wemake-services/inspect313/actions?query=workflow%3Atest)
+[![test](https://github.com/wemake-services/inspect313/actions/workflows/test.yml/badge.svg?branch=master&event=push)](https://github.com/wemake-services/inspect313/actions/workflows/test.yml)
 [![Python Version](https://img.shields.io/pypi/pyversions/inspect313.svg)](https://pypi.org/project/inspect313/)
 
 Backport of `inspect` module from Python3.13, supports Python 3.8+
