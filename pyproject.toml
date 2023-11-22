@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "inspect313"
-description = "Backport of `insect` module from Python3.13"
+description = "Backport of `inspect` module from Python3.13"
 version = "0.1.0"
 license = "MIT"
 

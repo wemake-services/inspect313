@@ -8,7 +8,7 @@ format:
 .PHONY: lint
 lint:
 	poetry run mypy inspect313
-	poetry run mypy --allow-incomplete-defs tests/**/*.py
+	poetry run mypy --allow-incomplete-defs tests
 
 .PHONY: unit
 unit:
