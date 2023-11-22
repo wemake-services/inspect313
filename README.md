@@ -3,7 +3,7 @@
 [![Build Status](https://github.com/wemake-services/inspect313/workflows/test/badge.svg?branch=master&event=push)](https://github.com/wemake-services/inspect313/actions?query=workflow%3Atest)
 [![Python Version](https://img.shields.io/pypi/pyversions/inspect313.svg)](https://pypi.org/project/inspect313/)
 
-Backport of `insect` module from Python 3.13, supports Python 3.8+
+Backport of `inspect` module from Python3.13, supports Python 3.8+
 
 ## Features
 
