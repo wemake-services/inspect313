@@ -40,6 +40,7 @@ Here's how `getfullargspec` is different from regular `signature` call:
 >>> inspect.getfullargspec(A().method)
 FullArgSpec(args=['self', 'arg'], varargs=None, varkw=None, defaults=None, kwonlyargs=[], kwonlydefaults=None, annotations={'return': None, 'arg': <class 'int'>})
 
+>>> # signature() produces a different result:
 >>> inspect.signature(A().method)
 <Signature (arg: int) -> None>
 
@@ -62,9 +63,13 @@ FullArgSpec(args=['self', 'arg'], varargs=None, varkw=None, defaults=None, kwonl
 >>> inspect.getfullargspec(func)
 FullArgSpec(args=[], varargs='args', varkw='kwargs', defaults=None, kwonlyargs=[], kwonlydefaults=None, annotations={'return': None})
 
+>>> # signature() produces a different result:
+>>> inspect.signature(func)
+<Signature (a: int, /, b: str) -> None>
+
 ```
 
-Here's how you can migrate:
+Here's how you can migrate, these results will be in line with `getfullargspec`:
 
 ```python
 >>> import inspect313

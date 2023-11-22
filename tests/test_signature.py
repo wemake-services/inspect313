@@ -1,6 +1,6 @@
 import functools
 import inspect
-from typing import Any, TypeVar, Callable, cast
+from typing import Any, Callable, TypeVar, cast
 
 import pytest
 
