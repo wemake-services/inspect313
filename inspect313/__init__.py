@@ -37,7 +37,7 @@ elif sys.version_info >= (3, 10):
                 locals=locals,
                 eval_str=eval_str,
             )
-elif sys.version_info >= (3, 9):
+elif sys.version_info >= (3, 8):
 
     class Signature(inspect.Signature):
         __doc__ = inspect.Signature.__doc__
@@ -86,7 +86,7 @@ elif sys.version_info >= (3, 10):
             locals=locals,
             eval_str=eval_str,
         )
-elif sys.version_info >= (3, 9):
+elif sys.version_info >= (3, 8):
 
     def signature(
         obj: _IntrospectableCallable,
