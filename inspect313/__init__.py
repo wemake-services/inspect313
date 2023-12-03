@@ -7,8 +7,6 @@ from typing import Any, Callable, Mapping
 
 from typing_extensions import Self, TypeAlias
 
-from inspect313 import _from_code
-
 _IntrospectableCallable: TypeAlias = Callable[..., Any]
 
 if sys.version_info < (3, 8):
@@ -27,13 +25,27 @@ else:
         @classmethod
         def from_frame(cls, frame: types.FrameType) -> Self:
             """Constructs Signature from the given frame object."""
-            return _from_code.signature_from_code(
-                cls,
-                frame.f_code,
-                locals=frame.f_locals,
-                compute_defaults=True,
-                is_duck_function=True,
-            )
+            func_code = frame.f_code
+            pos_count = func_code.co_argcount
+            arg_names = func_code.co_varnames
+            positional = arg_names[:pos_count]
+            keyword_only_count = func_code.co_kwonlyargcount
+            keyword_only = arg_names[pos_count : pos_count + keyword_only_count]
+
+            defaults = []
+            for name in positional:
+                if frame.f_locals and name in frame.f_locals:
+                    defaults.append(frame.f_locals[name])
+
+            kwdefaults = {}
+            for name in keyword_only:
+                if frame.f_locals and name in frame.f_locals:
+                    kwdefaults.update({name: frame.f_locals[name]})
+
+            func = types.FunctionType(func_code, {})
+            func.__defaults__ = tuple(defaults)
+            func.__kwdefaults__ = kwdefaults
+            return cls.from_callable(func)
 
         if sys.version_info >= (3, 10):
 
