@@ -41,8 +41,9 @@ ruff = "^0.1"
 
 [tool.ruff]
 line-length = 80
-
 fix = true
+
+[tool.ruff.lint]
 select = ['F', 'I']
 fixable = ['ALL']
 
