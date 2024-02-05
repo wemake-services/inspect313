@@ -90,6 +90,9 @@ Here's how you can migrate, these results will be in line with `getfullargspec`:
 
 ```
 
+However, consider migrating to just using `inspect.signature`,
+since it produces more correct results in a general case.
+
 ### Replace `inspect.getargvalues` with `inspect.Signature.from_frame`
 
 `getargvalues` was used to create signature-like objects from frame objects.
