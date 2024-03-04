@@ -75,15 +75,15 @@ Here's how you can migrate, these results will be in line with `getfullargspec`:
 >>> import inspect313
 
 >>> inspect313.signature(
-...    A().method, 
-...    skip_bound_arg=False, 
+...    A().method,
+...    skip_bound_arg=False,
 ...    follow_wrapped=False,
 ... )
 <Signature (self, arg: int) -> None>
 
 >>> inspect313.signature(
-...    func, 
-...    skip_bound_arg=False, 
+...    func,
+...    skip_bound_arg=False,
 ...    follow_wrapped=False,
 ... )
 <Signature (*args, **kwargs) -> None>
@@ -98,7 +98,7 @@ since it produces more correct results in a general case.
 `getargvalues` was used to create signature-like objects from frame objects.
 But, it didn't really support all features of modern functions.
 
-This is why Python 3.13 introduced `inspect.Signature.from_frame` 
+This is why Python 3.13 introduced `inspect.Signature.from_frame`
 public constructor and `getargvalues` and `formatargvalues` were deprecated.
 
 Here's how it worked before:
