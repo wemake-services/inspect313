@@ -14,8 +14,8 @@ repos:
     rev: v0.3.0
     hooks:
       - id: ruff
-        name: Run ruff on stubs, tests and scripts
-        args: ["--exit-non-zero-on-fix"]
+        args: ["--exit-non-zero-on-fix", "--fix"]
+      - id: ruff-format
 
 ci:
   autofix_commit_msg: "[pre-commit.ci] auto fixes from pre-commit.com hooks"
