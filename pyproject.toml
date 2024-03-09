@@ -68,26 +68,16 @@ enable_error_code = [
   'redundant-self',
 ]
 
-allow_redefinition = false
-check_untyped_defs = true
-disallow_any_explicit = false
-disallow_any_generics = true
-disallow_untyped_calls = true
-disallow_incomplete_defs = true
-ignore_errors = false
-ignore_missing_imports = true
-implicit_reexport = false
-local_partial_types = true
-strict_optional = true
-strict_equality = true
-no_implicit_optional = true
-warn_no_return = true
-warn_unused_ignores = true
-warn_redundant_casts = true
-warn_unused_configs = true
+strict = true
 warn_unreachable = true
+explicit_package_bases = true
+
+[[tool.mypy.overrides]]
+module = 'tests.*'
+# We want some functions with annotations and some without:
+disable_error_code = ['no-untyped-def']
 
 
 [build-system]
-requires = ["poetry-core>=1.6.0"]
+requires = ["poetry-core>=1.9.0"]
 build-backend = "poetry.core.masonry.api"
