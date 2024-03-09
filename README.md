@@ -9,6 +9,7 @@ Backport of `inspect` module from Python3.13, supports Python 3.8+
 
 - Fully typed with annotations and checked with mypy, [PEP561 compatible](https://www.python.org/dev/peps/pep-0561/)
 - Has backported `skip_bound_arg` argument to `signature` and `Signature.from_callable`
+- Has backported `Signature.from_frame` method
 
 ## Installation
 
