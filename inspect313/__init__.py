@@ -61,7 +61,7 @@ else:
                 eval_str: bool = False,
             ) -> Self:
                 """Constructs Signature for the given callable object."""
-                return inspect._signature_from_callable(  # type: ignore[attr-defined, unused-ignore]
+                return inspect._signature_from_callable(  # type: ignore[attr-defined, unused-ignore, no-any-return]
                     obj,
                     sigcls=cls,
                     follow_wrapper_chains=follow_wrapped,
@@ -81,7 +81,7 @@ else:
                 skip_bound_arg: bool = True,
             ) -> Self:
                 """Constructs Signature for the given callable object."""
-                return inspect._signature_from_callable(  # type: ignore[attr-defined, unused-ignore]
+                return inspect._signature_from_callable(  # type: ignore[attr-defined, unused-ignore, no-any-return]
                     obj,
                     sigcls=cls,
                     follow_wrapper_chains=follow_wrapped,
