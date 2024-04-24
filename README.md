@@ -8,7 +8,7 @@ Backport of `inspect` module from Python3.13, supports Python 3.8+
 ## Features
 
 - Fully typed with annotations and checked with mypy, [PEP561 compatible](https://www.python.org/dev/peps/pep-0561/)
-- Has backported `skip_bound_arg` argument to `signature` and `Signature.from_callable`
+- Has backported `bound_arg` parameter of `signature` and `Signature.from_callable` [gh-116559](https://github.com/python/cpython/pull/116559)
 - Has backported `Signature.from_frame` method
 
 ## Installation
@@ -23,7 +23,7 @@ pip install inspect313
 
 `getfullargspec` is an old way of getting the function signature.
 It is [deprecated](https://github.com/python/cpython/issues/108901) since Python 3.13,
-and new `skip_bound_arg: bool = True` argument was introduced in the same version.
+and new `bound_arg: bool = False` argument was introduced in the same version.
 
 However, this change was not backported, so users of older Python versions
 need this package to have the same functionality.
@@ -77,14 +77,14 @@ Here's how you can migrate, these results will be in line with `getfullargspec`:
 
 >>> inspect313.signature(
 ...    A().method,
-...    skip_bound_arg=False,
+...    bound_arg=True,
 ...    follow_wrapped=False,
 ... )
 <Signature (self, arg: int) -> None>
 
 >>> inspect313.signature(
 ...    func,
-...    skip_bound_arg=False,
+...    bound_arg=True,
 ...    follow_wrapped=False,
 ... )
 <Signature (*args, **kwargs) -> None>
