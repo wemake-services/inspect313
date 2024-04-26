@@ -55,7 +55,7 @@ else:
                 obj: _IntrospectableCallable,
                 *,
                 follow_wrapped: bool = True,
-                skip_bound_arg: bool = True,
+                bound_arg: bool = False,
                 globals: Mapping[str, Any] | None = None,
                 locals: Mapping[str, Any] | None = None,
                 eval_str: bool = False,
@@ -65,7 +65,7 @@ else:
                     obj,
                     sigcls=cls,
                     follow_wrapper_chains=follow_wrapped,
-                    skip_bound_arg=skip_bound_arg,
+                    skip_bound_arg=not bound_arg,
                     globals=globals,
                     locals=locals,
                     eval_str=eval_str,
@@ -78,14 +78,14 @@ else:
                 obj: _IntrospectableCallable,
                 *,
                 follow_wrapped: bool = True,
-                skip_bound_arg: bool = True,
+                bound_arg: bool = False,
             ) -> Self:
                 """Constructs Signature for the given callable object."""
                 return inspect._signature_from_callable(  # type: ignore[attr-defined, unused-ignore, no-any-return]
                     obj,
                     sigcls=cls,
                     follow_wrapper_chains=follow_wrapped,
-                    skip_bound_arg=skip_bound_arg,
+                    skip_bound_arg=not bound_arg,
                 )
 
 
@@ -98,7 +98,7 @@ elif sys.version_info >= (3, 10):
         obj: _IntrospectableCallable,
         *,
         follow_wrapped: bool = True,
-        skip_bound_arg: bool = True,
+        bound_arg: bool = False,
         globals: Mapping[str, Any] | None = None,
         locals: Mapping[str, Any] | None = None,
         eval_str: bool = False,
@@ -107,7 +107,7 @@ elif sys.version_info >= (3, 10):
         return Signature.from_callable(
             obj,
             follow_wrapped=follow_wrapped,
-            skip_bound_arg=skip_bound_arg,
+            bound_arg=bound_arg,
             globals=globals,
             locals=locals,
             eval_str=eval_str,
@@ -118,11 +118,11 @@ elif sys.version_info >= (3, 8):
         obj: _IntrospectableCallable,
         *,
         follow_wrapped: bool = True,
-        skip_bound_arg: bool = True,
+        bound_arg: bool = False,
     ) -> Signature:
         """Get a signature object for the passed callable."""
         return Signature.from_callable(
             obj,
             follow_wrapped=follow_wrapped,
-            skip_bound_arg=skip_bound_arg,
+            bound_arg=bound_arg,
         )

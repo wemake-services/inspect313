@@ -92,17 +92,13 @@ def test_signature_default(obj) -> None:
 def test_signature_to_migrate(obj, expected: str) -> None:
     """Test that you keep bound args."""
     assert (
-        str(
-            inspect313.signature(
-                obj, skip_bound_arg=False, follow_wrapped=False
-            )
-        )
+        str(inspect313.signature(obj, bound_arg=True, follow_wrapped=False))
         == expected
     )
     assert (
         str(
             inspect313.Signature.from_callable(
-                obj, skip_bound_arg=False, follow_wrapped=False
+                obj, bound_arg=True, follow_wrapped=False
             )
         )
         == expected
