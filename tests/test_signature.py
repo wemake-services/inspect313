@@ -94,7 +94,7 @@ def test_signature_to_migrate(obj, expected: str) -> None:
     assert (
         str(
             inspect313.signature(
-                obj, skip_bound_arg=False, follow_wrapped=False
+                obj, bound_arg=True, follow_wrapped=False
             )
         )
         == expected
@@ -102,7 +102,7 @@ def test_signature_to_migrate(obj, expected: str) -> None:
     assert (
         str(
             inspect313.Signature.from_callable(
-                obj, skip_bound_arg=False, follow_wrapped=False
+                obj, bound_arg=True, follow_wrapped=False
             )
         )
         == expected
