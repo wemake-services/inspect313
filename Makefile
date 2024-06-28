@@ -2,7 +2,7 @@ SHELL:=/usr/bin/env bash
 
 .PHONY: format
 format:
-	poetry run ruff --exit-non-zero-on-fix .
+	poetry run ruff check --exit-non-zero-on-fix .
 	poetry run ruff format --check .
 
 .PHONY: lint
